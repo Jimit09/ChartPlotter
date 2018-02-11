@@ -1,0 +1,45 @@
+﻿@model IEnumerable<TabularDataToChartConvertor.Models.SalesData>
+
+@{
+    ViewBag.Title = "Pie Chart";
+}
+
+<h2>Output in Pie Chart</h2>
+
+<br />
+
+<div>
+    @ViewBag.Message
+</div>
+
+<div id="piechart" style="width: 900px; height: 500px;"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+</script>
+
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var options = {
+            title: 'Sales Pie Chart',
+            is3D: true
+        };
+        var data = [];
+        @foreach (var item in Model)
+        {
+            @:data.push(["@item.DepartmentName", @item.SalesInPercentage]);
+        }
+
+        alert(data);
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn('string', 'Department Name');
+        dataTable.addColumn('number', 'Sales In Percentage');
+        dataTable.addRows(data);
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(dataTable, options);
+    }
+
+</script>
+
